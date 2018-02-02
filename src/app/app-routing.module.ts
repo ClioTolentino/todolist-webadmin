@@ -5,13 +5,17 @@ import {
 import { SigninComponent } from './ui/signin/signin.component';
 import { SignupComponent } from './ui/signup/signup.component';
 import { WorkbenchComponent } from './ui/workbench/workbench.component';
+import { TasksComponent } from './ui/tasks/tasks.component';
 
 const appRoutes: Routes = [
     { path: 'signin', component: SigninComponent },
     { path: 'signup', component: SignupComponent },
     {
         path: '', 
-        component: WorkbenchComponent
+        component: WorkbenchComponent,
+        children: [
+            { path: 'tasks', component: TasksComponent },
+        ]
     }
 ];
 
