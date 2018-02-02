@@ -1,0 +1,59 @@
+<div class="navbar-top">
+    <div class="navbar navbar-inverse navbar-fixed-top bg-danger-600">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/images/logo_light.png" alt="">
+            </a>
+            <ul class="nav navbar-nav visible-xs-block">
+                <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+                <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+            </ul>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-mobile">
+            <div class="navbar-right">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-bell2"></i>
+                            <span class="visible-xs-inline-block position-right">Activity</span>
+                            <span class="status-mark border-orange-400"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-content">
+                            <div class="width-350">
+                                <div class="panel-body text-center">
+                                    <h5 class="text-semibold">No new notifications</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="dropdown dropdown-user">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="/assets/images/user.png" alt=""><span>Jhon Doe</span><i class="caret"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a (click)="logoutBtnClick()"><i class="icon-switch2"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="page-container">
+        <div class="page-content">
+            <div class="sidebar sidebar-main sidebar-default sidebar-fixed">
+                <div class="sidebar-content">
+                    <div class="sidebar-category sidebar-category-visible">
+                        <div class="category-content no-padding">
+                            <ul class="navigation navigation-main navigation-accordion">
+                                <li><a routerLink="/dashboard"><i class="icon-meter2"></i> <span>Inbox <span class="label bg-blue-400">1</span></span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

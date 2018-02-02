@@ -6,13 +6,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SigninComponent } from './ui/signin/signin.component';
 import { SignupComponent } from './ui/signup/signup.component';
+import { WorkbenchComponent } from './ui/workbench/workbench.component';
 
 
 @NgModule({
     declarations: [
         AppComponent,
         SigninComponent,
-        SignupComponent
+        SignupComponent,
+        WorkbenchComponent
     ],
     imports: [
         BrowserModule,

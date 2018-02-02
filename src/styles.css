@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+
+.page-header-xs .page-title {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.panel-heading {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.dropdown-menu {
+    font-size: 14px;
+}
+
+.sortable-placeholder {
+    margin-top: 5px; 
+    margin-bottom: 5px;
+    background-color: rgb(78, 152, 236);
+}
+
+.sidebar-main {
+    width: 250px;
+}
+
+.sidebar-fixed.sidebar-default .sidebar-content {
+    width: 250px;
+}

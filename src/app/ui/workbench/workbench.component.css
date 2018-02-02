@@ -1,0 +1,11 @@
+.navigation>li>a { 
+    font-size: 14px;
+}
+
+.navigation li a>i { 
+    font-size: 18px;
+}
+
+.sidebar-default .navigation li>a { 
+    color: rgba(0,0,0,0.6);
+}
