@@ -3,7 +3,7 @@
         <div class="panel panel-body add-task">
             <div class="input-group content-group">
                 <div class="has-feedback has-feedback-left">
-                    <input type="text" class="form-control input-xlg text-light" placeholder="Add a to-do...">
+                    <input type="text" class="form-control input-xlg text-light" placeholder="Add a to-do..." [(ngModel)]="newTask" (keyup.enter)="addTask()">
                     <div class="form-control-feedback">
                         <i class="icon-plus3 text-size-base text-light"></i>
                     </div>
@@ -13,44 +13,37 @@
                 </div>
             </div>
         </div>
-        <div class="panel panel-white task" (click)="taskClick()">
+        <div class="panel panel-white task" (click)="taskClick(task)" *ngFor="let task of tasks">
             <div class="panel-heading">
                 <div class="media-left">
                     <checkbox-widget></checkbox-widget>
                 </div>
                 <div class="media-body">
-                    <h6 class="media-heading"><a href="#" class="text-default">Ducked ravenously dear</a></h6>
+                    <h6 class="media-heading"><span class="text-default">{{ task.title }}</span></h6>
                 </div>
                 <div class="heading-elements">
-                    <span><i class="icon-star-empty3 text-muted favorite"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-white task" (click)="taskClick()">
-            <div class="panel-heading">
-                <div class="media-left">
-                    <checkbox-widget></checkbox-widget>
-                </div>
-                <div class="media-body">
-                    <h6 class="media-heading"><a href="#" class="text-default">Task 2</a></h6>
+                    <span (click)="starredClick(task)">
+                        <i class="text-muted favorite text-success" 
+                            [ngClass]="{'icon-star-empty3': !task.completed, 'icon-star-full2': task.completed}"></i>
+                    </span>
                 </div>
             </div>
         </div>
     </div>                
 </div>
 <div class="sidebar sidebar-opposite sidebar-default task-content">
-    <div class="sidebar-content">
+    <div class="sidebar-content" *ngIf="selectedTask">
         <div class="panel panel-flat">
             <div class="panel-heading">
                 <div class="media-left">
                     <checkbox-widget></checkbox-widget>
                 </div>
                 <div class="media-body">
-                    <h6 class="media-heading"><a href="#" class="text-default">Task 2</a></h6>
+                    <h6 class="media-heading" contenteditable="true" (blur)="titleChanged($event.srcElement.innerText)"><span class="text-default">{{ selectedTask.title }}</span></h6>
                 </div>
                 <div class="heading-elements">
-                    <span class="cursor-pointer"><i class="icon-star-empty3 text-muted favorite"></i></span>
-                    <span class="cursor-pointer"><i class="icon-trash text-muted favorite"></i></span>
+                    <span class="cursor-pointer"><i class="text-muted favorite text-success" [ngClass]="{'icon-star-empty3': !selectedTask.completed, 'icon-star-full2': selectedTask.completed}"></i></span>
+                    <span class="cursor-pointer" (click)="deleteTaskClick()"><i class="icon-trash text-muted favorite"></i></span>
                     <span class="cursor-pointer" (click)="closeTaskClick()"><i class="icon-cross2 text-muted favorite"></i></span>
                 </div>
             </div>

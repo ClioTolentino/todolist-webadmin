@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TasksDbService } from '../../services/tasks-db.service';
+import { Task } from '../../models/task';
 
 declare var $: any;
 
@@ -8,18 +10,72 @@ declare var $: any;
     styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-    constructor() { }
+    private newTask: string;
+    private tasks: Task[] = [];
+    private selectedTask: Task;
+
+    constructor(private tasksService: TasksDbService) { }
 
     ngOnInit() {
         this.initJqueryComponents();
+
+        this.tasksService.tasks().then(tasks => {
+            this.tasks = tasks;
+            console.log(tasks);
+        });
     }
 
-    private taskClick() {
+    private async addTask() {
+        let newTask: Task = {
+            id: null,
+            createdAt: null,
+            updatedAt: null,
+            title: this.newTask,
+            dueDate: null,
+            notes: null,
+            starred: false,
+            completed: false,
+            subtasks: []
+        };
+        const task = await this.tasksService.create(newTask);
+        this.tasks.push(task);
+        this.newTask = null;
+    }
+
+    private taskClick(task: Task) {
+        this.selectedTask = task;
         $('body').addClass('sidebar-opposite-visible');
     }
 
     private closeTaskClick() {
+        this.selectedTask = null;
         $('body').toggleClass('sidebar-opposite-visible');
+    }
+
+    private async deleteTaskClick(task: Task) {
+        try {
+            await this.tasksService.destroy(this.selectedTask);
+            const index = this.tasks.findIndex(item => item.id === this.selectedTask.id);
+            this.tasks.splice(index, 1);
+            this.selectedTask = null;
+            $('body').toggleClass('sidebar-opposite-visible');
+        } catch (err) {
+
+        }
+    }
+
+    private async starredClick(task: Task) {
+        try {
+            task.completed = !task.completed;
+            await this.tasksService.update(task);
+        } catch (err) {
+
+        }
+    }
+
+    private titleChanged(newTitle) {
+        this.selectedTask.title = newTitle;
+        this.tasksService.update(this.selectedTask);
     }
 
     private initJqueryComponents() {

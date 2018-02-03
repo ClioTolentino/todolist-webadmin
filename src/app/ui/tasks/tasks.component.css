@@ -37,6 +37,7 @@
 
 .task .media-body {
     vertical-align: middle;
+    padding-right: 30px;
 }
 
 .task .heading-elements .favorite {
@@ -76,6 +77,10 @@
     font-size: 16px;
     font-weight: lighter;
     margin-left: 4px;
+}
+
+.task-content .panel-heading .media-body {
+    padding-right: 64px;
 }
 
 .task-content .panel-body {
