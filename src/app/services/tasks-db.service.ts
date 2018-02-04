@@ -9,10 +9,12 @@ export class TasksDbService {
     public async tasks(): Promise<Task[]> {
         return new Promise<Task[]>((resolve, reject) => {
             this.http.get<any>('http://localhost:1337/tasks').subscribe(data => {
+                console.log(data);
                 if (!data.err) {
                     const tasks: Task[] = [];
                     data.tasks.forEach(item => {
-                        tasks.push({
+                        item.subtasks = item.subtasks || [];
+                        const task = {
                             id: item.id,
                             createdAt: item.createdAt,
                             updatedAt: item.updatedAt,
@@ -21,8 +23,12 @@ export class TasksDbService {
                             notes: item.notes || null,
                             starred: item.starred || false,
                             completed: item.completed || false,
-                            subtasks: []
-                        });
+                            subtasks: item.subtasks.map(subtask => {
+                                return { id: subtask.id, name: subtask.name, completed: subtask.completed };
+                            })
+                        };
+                        task.subtasks = task.subtasks || [];
+                        tasks.push(task);
                         resolve(tasks);
                     });
                 } else {
@@ -41,14 +47,17 @@ export class TasksDbService {
         return new Promise<Task>((resolve, reject) => {
             this.http.post<any>('http://localhost:1337/tasks', task, httpOptions).toPromise().then(data => {
                 if (data.err) reject(data.err);
-                else resolve(data.task);
+                else {
+                    data.task.subtasks = [];
+                    resolve(data.task);
+                }
             }).catch(err => {
                 reject(err);
             });
         });
     }
 
-    public async update(task: Task) {
+    public async update(task: Task): Promise<Task> {
         const httpOptions = {
             headers: new HttpHeaders({
               'Content-Type':  'application/json'
@@ -57,7 +66,9 @@ export class TasksDbService {
         return new Promise<Task>((resolve, reject) => {
             this.http.put<any>(`http://localhost:1337/tasks/${task.id}`, task, httpOptions).toPromise().then(data => {
                 if (data.err) reject(data.err);
-                else resolve();
+                else {
+                    resolve(data.task);
+                }
             }).catch(err => {
                 reject(err);
             });

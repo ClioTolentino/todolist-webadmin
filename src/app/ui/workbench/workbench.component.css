@@ -1,9 +1,11 @@
 .navigation>li>a { 
     font-size: 16px;
+    font-weight: normal;
 }
 
 .navigation li a>i { 
     font-size: 18px;
+    font-weight: normal
 }
 
 .sidebar-default .navigation li>a { 

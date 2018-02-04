@@ -16,7 +16,7 @@
         <div class="panel panel-white task" (click)="taskClick(task)" *ngFor="let task of tasks">
             <div class="panel-heading">
                 <div class="media-left">
-                    <checkbox-widget></checkbox-widget>
+                    <checkbox-widget [checked]="task.completed" (checkedChange)="task.completed = $event"></checkbox-widget>
                 </div>
                 <div class="media-body">
                     <h6 class="media-heading"><span class="text-default">{{ task.title }}</span></h6>
@@ -24,7 +24,7 @@
                 <div class="heading-elements">
                     <span (click)="starredClick(task)">
                         <i class="text-muted favorite text-success" 
-                            [ngClass]="{'icon-star-empty3': !task.completed, 'icon-star-full2': task.completed}"></i>
+                            [ngClass]="{'icon-star-empty3': !task.starred, 'icon-star-full2': task.starred}"></i>
                     </span>
                 </div>
             </div>
@@ -36,13 +36,13 @@
         <div class="panel panel-flat">
             <div class="panel-heading">
                 <div class="media-left">
-                    <checkbox-widget></checkbox-widget>
+                    <checkbox-widget [checked]="selectedTask.completed" (checkedChange)="selectedTask.completed = $event"></checkbox-widget>
                 </div>
                 <div class="media-body">
                     <h6 class="media-heading" contenteditable="true" (blur)="titleChanged($event.srcElement.innerText)"><span class="text-default">{{ selectedTask.title }}</span></h6>
                 </div>
                 <div class="heading-elements">
-                    <span class="cursor-pointer"><i class="text-muted favorite text-success" [ngClass]="{'icon-star-empty3': !selectedTask.completed, 'icon-star-full2': selectedTask.completed}"></i></span>
+                    <span class="cursor-pointer"><i class="text-muted favorite text-success" [ngClass]="{'icon-star-empty3': !selectedTask.starred, 'icon-star-full2': selectedTask.starred}"></i></span>
                     <span class="cursor-pointer" (click)="deleteTaskClick()"><i class="icon-trash text-muted favorite"></i></span>
                     <span class="cursor-pointer" (click)="closeTaskClick()"><i class="icon-cross2 text-muted favorite"></i></span>
                 </div>
@@ -69,23 +69,36 @@
                             </h6>
                         </div>
                     </li>
-                    <li class="media">
+                    <li class="media subtask" *ngFor="let subtask of selectedTask.subtasks; let idx = index" [ngStyle]="{'margin-top': idx > 0 ? '0px' : '20px'}">
                         <div class="media-left">
-                            <i class="icon-plus3 text-muted"></i>
+                            <checkbox-widget></checkbox-widget>
                         </div>
                         <div class="media-body">
                             <h6 class="media-heading">
-                                <label for="task3" class="no-margin cursor-pointer text-muted text-light">Add a subtask</label>
+                                <label for="task3" class="no-margin cursor-pointer text-light">{{ subtask.name }}</label>
+                            </h6>
+                        </div>
+                    </li>
+                    <li class="media" [ngStyle]="{'margin-top': selectedTask.subtasks.length > 0 ? '10px' : '20px'}">
+                        <div class="media-left">
+                            <i class="icon-plus3" [ngClass]="{'text-muted': selectedTask.subtasks.length == 0, 'text-success': selectedTask.subtasks.length > 0}"></i>
+                        </div>
+                        <div class="media-body">
+                            <h6 #subtask class="media-heading cursor-pointer text-muted text-light" contenteditable="true" 
+                                (focus)="subtask.innerText = ''" 
+                                (keyup.enter)="addSubtask(subtask.innerText); subtask.innerText = ''" 
+                                (blur)="subtask.innerText = 'Add a subtask'">
+                                Add a subtask
                             </h6>
                         </div>
                     </li>
                     <li class="media">
                         <div class="media-left">
-                            <i class="icon-pencil text-muted"></i>
+                            <i class="icon-pencil" [ngClass]="{'text-muted': !selectedTask.notes, 'text-info': selectedTask.notes}"></i>
                         </div>
                         <div class="media-body">
-                            <h6 class="media-heading">
-                                <label for="task3" class="no-margin cursor-pointer text-muted text-light">Add a note...</label>
+                            <h6 #notes class="media-heading text-light" contenteditable="true" [ngClass]="{'text-muted': !selectedTask.notes}" (keyup.enter)="notesChanged(notes.innerText); notes.blur()">
+                                {{ selectedTask.notes || 'Add a note...' }}
                             </h6>
                         </div>
                     </li>

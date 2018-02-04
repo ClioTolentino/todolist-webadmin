@@ -21,7 +21,6 @@ export class TasksComponent implements OnInit {
 
         this.tasksService.tasks().then(tasks => {
             this.tasks = tasks;
-            console.log(tasks);
         });
     }
 
@@ -64,9 +63,18 @@ export class TasksComponent implements OnInit {
         }
     }
 
-    private async starredClick(task: Task) {
+    private async completedClick(task: Task) {
         try {
             task.completed = !task.completed;
+            await this.tasksService.update(task);
+        } catch (err) {
+
+        }
+    }
+
+    private async starredClick(task: Task) {
+        try {
+            task.starred = !task.starred;
             await this.tasksService.update(task);
         } catch (err) {
 
@@ -76,6 +84,23 @@ export class TasksComponent implements OnInit {
     private titleChanged(newTitle) {
         this.selectedTask.title = newTitle;
         this.tasksService.update(this.selectedTask);
+    }
+
+    private notesChanged(newNotes) {
+        newNotes = newNotes === '' ? null : newNotes;
+        this.selectedTask.notes = newNotes;
+        this.tasksService.update(this.selectedTask);
+    }
+
+    private async addSubtask(newSubtask) {
+        this.selectedTask.subtasks.push({
+            id: null,
+            name: newSubtask,
+            completed: false
+        });
+        const updatedTask = await this.tasksService.update(this.selectedTask);
+        const task = this.tasks.find(item => item.id === updatedTask.id);
+        task.subtasks = updatedTask.subtasks;
     }
 
     private initJqueryComponents() {
