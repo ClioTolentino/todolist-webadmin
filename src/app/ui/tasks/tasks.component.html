@@ -106,12 +106,30 @@
                     </li>
                     <li class="media">
                         <div class="media-left">
-                            <i class="icon-attachment text-muted"></i>
+                            <i class="icon-attachment" [ngClass]="{'text-muted': selectedTask.attachments.length == 0, 'text-primary': selectedTask.attachments.length > 0}"></i>
                         </div>
                         <div class="media-body">
                             <h6 class="media-heading">
-                                <label for="task3" class="no-margin cursor-pointer text-muted text-light">Add a file</label>
+                                <label for="task3" class="no-margin cursor-pointer text-muted text-light" (click)="addFileClick()">Add a file</label>
                             </h6>
+                            <ul class="mail-attachments">
+                                <li *ngFor="let attachment of selectedTask.attachments">
+                                    <span class="mail-attachments-preview">
+                                        <i class="icon-file-empty icon-2x"></i>
+                                    </span>
+
+                                    <div class="mail-attachments-content">
+                                        <span class="text-semibold">{{ attachment.filename }}</span>
+
+                                        <ul class="list-inline list-inline-condensed no-margin">
+                                            <!-- <li class="text-muted">174 KB</li> -->
+                                            <li><a>View</a></li>
+                                            <li><a>Download</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            <input type="file" id="new-file" style="display: none" (change)="addFiles($event.target.files)" />
                         </div>
                     </li>
                 </ul>

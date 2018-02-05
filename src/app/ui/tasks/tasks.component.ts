@@ -30,6 +30,7 @@ export class TasksComponent implements OnInit {
             starred: false,
             completed: false,
             subtasks: [],
+            attachments: [],
             dueDateLabel: null
         }
     }
@@ -53,7 +54,8 @@ export class TasksComponent implements OnInit {
             notes: null,
             starred: false,
             completed: false,
-            subtasks: []
+            subtasks: [],
+            attachments: []
         };
         const task = await this.tasksService.create(newTask);
         this.tasks.push(<TaskVm> task);
@@ -120,6 +122,21 @@ export class TasksComponent implements OnInit {
         const updatedTask = await this.tasksService.update(this.selectedTask);
         const task = this.tasks.find(item => item.id === updatedTask.id);
         task.subtasks = updatedTask.subtasks;
+    }
+
+    private addFileClick() {
+         $("#new-file").trigger('click');
+    }
+
+    private async addFiles(files: FileList) {
+        if (files.length > 0) {
+            try {
+                const attachment = await this.tasksService.uploadFile(this.selectedTask, files[0]);
+                this.selectedTask.attachments.push(attachment);
+            } catch (err) {
+                // empty
+            }
+        }
     }
 
     private initJqueryComponents() {

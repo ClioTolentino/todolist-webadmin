@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Task } from '../models/task';
+import { Attachment } from '../models/attachment';
 
 @Injectable()
 export class TasksDbService {
@@ -25,7 +26,8 @@ export class TasksDbService {
                             completed: item.completed || false,
                             subtasks: item.subtasks.map(subtask => {
                                 return { id: subtask.id, name: subtask.name, completed: subtask.completed };
-                            })
+                            }),
+                            attachments: item.attachments || []
                         };
                         task.subtasks = task.subtasks || [];
                         tasks.push(task);
@@ -49,6 +51,7 @@ export class TasksDbService {
                 if (data.err) reject(data.err);
                 else {
                     data.task.subtasks = [];
+                    data.task.attachments = [];
                     resolve(data.task);
                 }
             }).catch(err => {
@@ -92,11 +95,29 @@ export class TasksDbService {
 
     }
 
-    public addSubtask(id: string) {
-
-    }
-
-    public removeSubtask(id: string) {
-
+    public async uploadFile(task: Task, file: File): Promise<Attachment> {
+        let formData: FormData = new FormData();
+        formData.append('attachment', file, file.name);
+        const options = {
+            headers: new HttpHeaders({
+              'Accept': 'application/json'
+            })
+        };
+        return new Promise<Attachment>((resolve, reject) => {
+            this.http.post<any>(`http://localhost:1337/tasks/${task.id}/files`, formData, options).toPromise()
+                .then(res => {
+                    const attachment: Attachment = {
+                        id: res.files[0].id,
+                        createdAt: res.files[0].createdAt,
+                        updatedAt: res.files[0].updatedAt,
+                        filename: res.files[0].filename,
+                        path: res.files[0].path,
+                        size: res.files[0].size,
+                        type: res.files[0].type
+                    }
+                    resolve(attachment);
+                })
+                .catch(err => reject(err));
+        });
     }
 }

@@ -102,3 +102,13 @@
     border: none;
     padding-bottom: 0px;
 }
+
+.mail-attachments>li {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    width: 90%;
+}
+
+.mail-attachments>li .list-inline>li {
+    font-size: 12px;
+}
