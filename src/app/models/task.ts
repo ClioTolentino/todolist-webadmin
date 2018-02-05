@@ -4,6 +4,7 @@ import { Attachment } from "./attachment";
 export interface Task extends Base {
     title: string;
     dueDate: Date;
+    alertDate: Date;
     notes: string;
     starred: boolean;
     completed: boolean;

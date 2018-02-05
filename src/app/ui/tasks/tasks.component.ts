@@ -7,6 +7,7 @@ declare var moment: any;
 
 interface TaskVm extends Task {
     dueDateLabel: string;
+    alertDateLabel: string;
 }
 
 @Component({
@@ -26,12 +27,14 @@ export class TasksComponent implements OnInit {
             updatedAt: null,
             title: null,
             dueDate: null,
+            alertDate: null,
             notes:  null,
             starred: false,
             completed: false,
             subtasks: [],
             attachments: [],
-            dueDateLabel: null
+            dueDateLabel: null,
+            alertDateLabel: null
         }
     }
 
@@ -40,7 +43,10 @@ export class TasksComponent implements OnInit {
 
         this.tasksService.tasks().then(tasks => {
             this.tasks = <TaskVm[]> tasks;
-            this.tasks.forEach(item => item.dueDate ? this.setDueDateLabel(item, moment(item.dueDate)) : null)
+            this.tasks.forEach(item => {
+                item.dueDate ? this.setDueDateLabel(item, moment(item.dueDate)) : null;
+                item.alertDate ? this.setAlertDateLabel(item, moment(item.alertDate)) : null;
+            })
         });
     }
 
@@ -51,6 +57,7 @@ export class TasksComponent implements OnInit {
             updatedAt: null,
             title: this.newTask,
             dueDate: null,
+            alertDate: null,
             notes: null,
             starred: false,
             completed: false,
@@ -154,9 +161,21 @@ export class TasksComponent implements OnInit {
             this.setDueDateLabel(this.selectedTask, start);
             this.tasksService.update(this.selectedTask);
         });
+
+        $('#alert-date').daterangepicker({ 
+            singleDatePicker: true
+        }, (start, end) => {
+            this.selectedTask.alertDate = start;
+            this.setAlertDateLabel(this.selectedTask, start);
+            this.tasksService.update(this.selectedTask);
+        });
     }
 
     private setDueDateLabel(task, date) {
         task.dueDateLabel = 'Due on ' + date.format('MMMM D, YYYY');
+    }
+
+    private setAlertDateLabel(task, date) {
+        task.alertDateLabel = 'Remind me at ' + date.format('MMMM D, YYYY');
     }
 }

@@ -63,11 +63,12 @@
                     </li>
                     <li class="media">
                         <div class="media-left">
-                            <i class="icon-alarm text-muted"></i>
+                            <i class="icon-alarm" [ngClass]="{ 'text-muted': !selectedTask.alertDate, 'text-primary': selectedTask.alertDate }"></i>
                         </div>
                         <div class="media-body">
                             <h6 class="media-heading">
-                                <label for="task2" class="no-margin cursor-pointer text-muted text-light">Remind me</label>
+                                <label id="alert-date" class="no-margin cursor-pointer text-light"
+                                [ngClass]="{ 'text-muted': !selectedTask.alertDate, 'text-primary': selectedTask.alertDate }">{{ selectedTask.alertDateLabel || 'Remind me' }}</label>
                             </h6>
                         </div>
                     </li>

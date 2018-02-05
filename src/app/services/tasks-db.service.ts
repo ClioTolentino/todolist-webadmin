@@ -21,6 +21,7 @@ export class TasksDbService {
                             updatedAt: item.updatedAt,
                             title: item.title,
                             dueDate: item.dueDate || null,
+                            alertDate: item.alertDate || null,
                             notes: item.notes || null,
                             starred: item.starred || false,
                             completed: item.completed || false,
