@@ -22,6 +22,7 @@
                     <h6 class="media-heading"><span class="text-default">{{ task.title }}</span></h6>
                 </div>
                 <div class="heading-elements">
+                    <span class="label label-flat border-primary text-primary-600 heading-text mr-10" *ngIf="task.dueDateLabel">{{ task.dueDateLabel }}</span>
                     <span (click)="starredClick(task)">
                         <i class="text-muted favorite text-success" 
                             [ngClass]="{'icon-star-empty3': !task.starred, 'icon-star-full2': task.starred}"></i>
@@ -32,7 +33,7 @@
     </div>                
 </div>
 <div class="sidebar sidebar-opposite sidebar-default task-content">
-    <div class="sidebar-content" *ngIf="selectedTask">
+    <div class="sidebar-content">
         <div class="panel panel-flat">
             <div class="panel-heading">
                 <div class="media-left">
@@ -51,11 +52,12 @@
                 <ul class="media-list">
                     <li class="media">
                         <div class="media-left">
-                            <i class="icon-calendar text-muted"></i>
+                            <i class="icon-calendar" [ngClass]="{ 'text-muted': !selectedTask.dueDate, 'text-primary': selectedTask.dueDate }"></i>
                         </div>
                         <div class="media-body">
                             <h6 class="media-heading">
-                                <label for="task1" class="no-margin cursor-pointer text-muted text-light">Set due date</label>
+                                <label id="due-date" class="no-margin cursor-pointer text-muted text-light" 
+                                    [ngClass]="{ 'text-muted': !selectedTask.dueDate, 'text-primary': selectedTask.dueDate }">{{ selectedTask.dueDateLabel || 'Set due date' }}</label>
                             </h6>
                         </div>
                     </li>

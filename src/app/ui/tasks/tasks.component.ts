@@ -3,6 +3,11 @@ import { TasksDbService } from '../../services/tasks-db.service';
 import { Task } from '../../models/task';
 
 declare var $: any;
+declare var moment: any;
+
+interface TaskVm extends Task {
+    dueDateLabel: string;
+}
 
 @Component({
     selector: 'app-tasks',
@@ -11,16 +16,30 @@ declare var $: any;
 })
 export class TasksComponent implements OnInit {
     private newTask: string;
-    private tasks: Task[] = [];
-    private selectedTask: Task;
+    private tasks: TaskVm[] = [];
+    private selectedTask: TaskVm;
 
-    constructor(private tasksService: TasksDbService) { }
+    constructor(private tasksService: TasksDbService) {
+        this.selectedTask = {
+            id: null,
+            createdAt: null,
+            updatedAt: null,
+            title: null,
+            dueDate: null,
+            notes:  null,
+            starred: false,
+            completed: false,
+            subtasks: [],
+            dueDateLabel: null
+        }
+    }
 
     ngOnInit() {
         this.initJqueryComponents();
 
         this.tasksService.tasks().then(tasks => {
-            this.tasks = tasks;
+            this.tasks = <TaskVm[]> tasks;
+            this.tasks.forEach(item => item.dueDate ? this.setDueDateLabel(item, moment(item.dueDate)) : null)
         });
     }
 
@@ -37,12 +56,12 @@ export class TasksComponent implements OnInit {
             subtasks: []
         };
         const task = await this.tasksService.create(newTask);
-        this.tasks.push(task);
+        this.tasks.push(<TaskVm> task);
         this.newTask = null;
     }
 
     private taskClick(task: Task) {
-        this.selectedTask = task;
+        this.selectedTask = <TaskVm> task;
         $('body').addClass('sidebar-opposite-visible');
     }
 
@@ -110,5 +129,17 @@ export class TasksComponent implements OnInit {
         $(window).on("resize", () => {
             $('.task-content').css('height', $(window).height() - navbarHeight);
         });
+
+        $('#due-date').daterangepicker({ 
+            singleDatePicker: true
+        }, (start, end) => {
+            this.selectedTask.dueDate = start;
+            this.setDueDateLabel(this.selectedTask, start);
+            this.tasksService.update(this.selectedTask);
+        });
+    }
+
+    private setDueDateLabel(task, date) {
+        task.dueDateLabel = 'Due on ' + date.format('MMMM D, YYYY');
     }
 }
