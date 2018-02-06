@@ -21,7 +21,7 @@ export class TasksComponent implements OnInit {
     private selectedTask: TaskVm;
 
     constructor(private tasksService: TasksDbService) {
-        this.selectedTask = this.emptyTask();
+        this.selectedTask = this.createEmptyTask();
     }
 
     ngOnInit() {
@@ -61,7 +61,7 @@ export class TasksComponent implements OnInit {
     }
 
     private closeTaskClick() {
-        this.selectedTask = this.emptyTask();
+        this.selectedTask = this.createEmptyTask();
         $('body').toggleClass('sidebar-opposite-visible');
     }
 
@@ -134,7 +134,7 @@ export class TasksComponent implements OnInit {
 
     private initJqueryComponents() {
         const navbarHeight = $('.navbar').height();
-        // $('body').toggleClass('sidebar-opposite-visible');
+        $('body').removeClass('sidebar-opposite-visible');
         $('.task-content').css('height', $(window).height() - navbarHeight);
         $(window).on("resize", () => {
             $('.task-content').css('height', $(window).height() - navbarHeight);
@@ -157,7 +157,7 @@ export class TasksComponent implements OnInit {
         });
     }
 
-    private emptyTask(): TaskVm {
+    private createEmptyTask(): TaskVm {
         return {
             id: null,
             createdAt: null,
