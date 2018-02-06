@@ -9,7 +9,7 @@ export class TasksDbService {
 
     public async tasks(): Promise<Task[]> {
         return new Promise<Task[]>((resolve, reject) => {
-            this.http.get<any>('http://localhost:1337/tasks').subscribe(data => {
+            this.http.get<any>('http://localhost:1337/tasks', { withCredentials: true }).subscribe(data => {
                 console.log(data);
                 if (!data.err) {
                     const tasks: Task[] = [];
@@ -42,13 +42,14 @@ export class TasksDbService {
     }
 
     public async create(task: Task): Promise<Task> {
-        const httpOptions = {
+        const options = {
             headers: new HttpHeaders({
               'Content-Type':  'application/json'
-            })
+            }),
+            withCredentials: true
         };
         return new Promise<Task>((resolve, reject) => {
-            this.http.post<any>('http://localhost:1337/tasks', task, httpOptions).toPromise().then(data => {
+            this.http.post<any>('http://localhost:1337/tasks', task, options).toPromise().then(data => {
                 if (data.err) reject(data.err);
                 else {
                     data.task.subtasks = [];
@@ -62,13 +63,14 @@ export class TasksDbService {
     }
 
     public async update(task: Task): Promise<Task> {
-        const httpOptions = {
+        const options = {
             headers: new HttpHeaders({
               'Content-Type':  'application/json'
-            })
+            }),
+            withCredentials: true
         };
         return new Promise<Task>((resolve, reject) => {
-            this.http.put<any>(`http://localhost:1337/tasks/${task.id}`, task, httpOptions).toPromise().then(data => {
+            this.http.put<any>(`http://localhost:1337/tasks/${task.id}`, task, options).toPromise().then(data => {
                 if (data.err) reject(data.err);
                 else {
                     resolve(data.task);
@@ -80,13 +82,14 @@ export class TasksDbService {
     }
 
     public async destroy(task: Task) {
-        const httpOptions = {
+        const options = {
             headers: new HttpHeaders({
               'Content-Type':  'application/json'
-            })
+            }),
+            withCredentials: true
         };
         return new Promise<Task>((resolve, reject) => {
-            this.http.delete(`http://localhost:1337/tasks/${task.id}`, httpOptions).toPromise()
+            this.http.delete(`http://localhost:1337/tasks/${task.id}`, options).toPromise()
                 .then(task => resolve())
                 .catch(err => reject(err));
         });
@@ -102,7 +105,8 @@ export class TasksDbService {
         const options = {
             headers: new HttpHeaders({
               'Accept': 'application/json'
-            })
+            }),
+            withCredentials: true
         };
         return new Promise<Attachment>((resolve, reject) => {
             this.http.post<any>(`http://localhost:1337/tasks/${task.id}/files`, formData, options).toPromise()

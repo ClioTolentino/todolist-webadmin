@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AccountService } from '../../services/account.service';
 
 declare var $:any;
 
@@ -8,10 +10,15 @@ declare var $:any;
     styleUrls: ['./workbench.component.css']
 })
 export class WorkbenchComponent implements OnInit {
-    constructor() { }
+    constructor(private accountService: AccountService, private router: Router) { }
 
     ngOnInit() {
         this.initJqueryComponents();
+    }
+
+    private signOutBtnClick() {
+        this.accountService.signOut();
+        this.router.navigate(['signin']);
     }
 
     private initJqueryComponents() {

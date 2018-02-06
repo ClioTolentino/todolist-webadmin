@@ -21,21 +21,7 @@ export class TasksComponent implements OnInit {
     private selectedTask: TaskVm;
 
     constructor(private tasksService: TasksDbService) {
-        this.selectedTask = {
-            id: null,
-            createdAt: null,
-            updatedAt: null,
-            title: null,
-            dueDate: null,
-            alertDate: null,
-            notes:  null,
-            starred: false,
-            completed: false,
-            subtasks: [],
-            attachments: [],
-            dueDateLabel: null,
-            alertDateLabel: null
-        }
+        this.selectedTask = this.emptyTask();
     }
 
     ngOnInit() {
@@ -75,7 +61,7 @@ export class TasksComponent implements OnInit {
     }
 
     private closeTaskClick() {
-        this.selectedTask = null;
+        this.selectedTask = this.emptyTask();
         $('body').toggleClass('sidebar-opposite-visible');
     }
 
@@ -169,6 +155,24 @@ export class TasksComponent implements OnInit {
             this.setAlertDateLabel(this.selectedTask, start);
             this.tasksService.update(this.selectedTask);
         });
+    }
+
+    private emptyTask(): TaskVm {
+        return {
+            id: null,
+            createdAt: null,
+            updatedAt: null,
+            title: null,
+            dueDate: null,
+            alertDate: null,
+            notes:  null,
+            starred: false,
+            completed: false,
+            subtasks: [],
+            attachments: [],
+            dueDateLabel: null,
+            alertDateLabel: null
+        }
     }
 
     private setDueDateLabel(task, date) {

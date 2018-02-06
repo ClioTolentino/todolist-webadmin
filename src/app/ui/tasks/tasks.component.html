@@ -16,10 +16,15 @@
         <div class="panel panel-white task" (click)="taskClick(task)" *ngFor="let task of tasks">
             <div class="panel-heading">
                 <div class="media-left">
-                    <checkbox-widget [checked]="task.completed" (checkedChange)="task.completed = $event"></checkbox-widget>
+                    <checkbox-widget [checked]="task.completed" (checkedChange)="completedClick(task)"></checkbox-widget>
                 </div>
                 <div class="media-body">
-                    <h6 class="media-heading"><span class="text-default">{{ task.title }}</span></h6>
+                    <h6 class="media-heading">
+                        <span class="text-default">
+                            <s *ngIf="task.completed">{{ task.title }}</s>
+                            <ng-container *ngIf="!task.completed">{{ task.title }}</ng-container>
+                        </span>
+                    </h6>
                 </div>
                 <div class="heading-elements">
                     <span class="label label-flat border-primary text-primary-600 heading-text mr-10" *ngIf="task.dueDateLabel">{{ task.dueDateLabel }}</span>
@@ -37,7 +42,7 @@
         <div class="panel panel-flat">
             <div class="panel-heading">
                 <div class="media-left">
-                    <checkbox-widget [checked]="selectedTask.completed" (checkedChange)="selectedTask.completed = $event"></checkbox-widget>
+                    <checkbox-widget [checked]="selectedTask.completed" (checkedChange)="completedClick(selectedTask)"></checkbox-widget>
                 </div>
                 <div class="media-body">
                     <h6 class="media-heading" contenteditable="true" (blur)="titleChanged($event.srcElement.innerText)"><span class="text-default">{{ selectedTask.title }}</span></h6>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AccountService } from '../../services/account.service';
 
 @Component({
     selector: 'app-signup',
@@ -17,9 +18,19 @@ export class SignupComponent implements OnInit {
     private emailError: string;
     private passwordError: string;
 
-    constructor(private router: Router) { }
+    constructor(private accountService: AccountService, private router: Router) { }
 
     ngOnInit() {
+    }
+
+    private async signUpBtnClick() {
+        try {
+            await this.accountService.signUp(this.email, this.password);
+            await this.accountService.signIn(this.email, this.password);
+            this.router.navigate(['tasks']);
+        } catch (err) {
+            this.error = 'Bad credentials, try again';
+        }
     }
 
     private signInBtnClick() {

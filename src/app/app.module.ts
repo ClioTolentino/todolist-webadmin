@@ -13,6 +13,7 @@ import { TasksComponent } from './ui/tasks/tasks.component';
 import { CheckboxWidget, SwitchWidget } from './ui/widgets/checkbox.widget';
 
 import { TasksDbService } from './services/tasks-db.service';
+import { AccountService } from './services/account.service';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { TasksDbService } from './services/tasks-db.service';
         AppRoutingModule
     ],
     providers: [
-        TasksDbService
+        TasksDbService,
+        AccountService
     ],
     bootstrap: [AppComponent]
 })
