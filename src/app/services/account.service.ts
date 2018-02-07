@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AccountService {
@@ -14,7 +15,7 @@ export class AccountService {
             withCredentials: true
         };
         return new Promise<User>((resolve, reject) => {
-            this.http.get<User>('http://localhost:1337/account', options).toPromise().then(user => {
+            this.http.get<User>(`${environment.serverUrl}/account`, options).toPromise().then(user => {
                 resolve(user);
             }).catch(err => {
                 reject(err);
@@ -31,7 +32,7 @@ export class AccountService {
         };
         return new Promise<User>((resolve, reject) => {
             const body = { email: email, password: password };
-            this.http.put<User>('http://localhost:1337/account', body, options).toPromise().then(user => {
+            this.http.put<User>(`${environment.serverUrl}/account`, body, options).toPromise().then(user => {
                 resolve(user);
             }).catch(err => {
                 reject(err);
@@ -48,7 +49,7 @@ export class AccountService {
         };
         return new Promise<User>((resolve, reject) => {
             const body = { email: email, password: password };
-            this.http.post<User>('http://localhost:1337/account', body, options).toPromise().then(user => {
+            this.http.post<User>(`${environment.serverUrl}/account`, body, options).toPromise().then(user => {
                 resolve(user);
             }).catch(err => {
                 reject(err);
@@ -64,7 +65,7 @@ export class AccountService {
             withCredentials: true
         };
         return new Promise<User>((resolve, reject) => {
-            this.http.delete('http://localhost:1337/account', options).toPromise().then(() => {
+            this.http.delete(`${environment.serverUrl}/account`, options).toPromise().then(() => {
                 resolve();
             }).catch(err => {
                 reject(err);

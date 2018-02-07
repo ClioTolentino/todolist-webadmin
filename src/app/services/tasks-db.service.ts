@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Task } from '../models/task';
 import { Attachment } from '../models/attachment';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable()
 export class TasksDbService {
@@ -9,7 +10,7 @@ export class TasksDbService {
 
     public async tasks(): Promise<Task[]> {
         return new Promise<Task[]>((resolve, reject) => {
-            this.http.get<any>('http://localhost:1337/tasks', { withCredentials: true }).subscribe(data => {
+            this.http.get<any>(`${environment.serverUrl}/tasks`, { withCredentials: true }).subscribe(data => {
                 console.log(data);
                 if (!data.err) {
                     const tasks: Task[] = [];
@@ -49,7 +50,7 @@ export class TasksDbService {
             withCredentials: true
         };
         return new Promise<Task>((resolve, reject) => {
-            this.http.post<any>('http://localhost:1337/tasks', task, options).toPromise().then(data => {
+            this.http.post<any>(`${environment.serverUrl}/tasks`, task, options).toPromise().then(data => {
                 if (data.err) reject(data.err);
                 else {
                     data.task.subtasks = [];
@@ -70,7 +71,7 @@ export class TasksDbService {
             withCredentials: true
         };
         return new Promise<Task>((resolve, reject) => {
-            this.http.put<any>(`http://localhost:1337/tasks/${task.id}`, task, options).toPromise().then(data => {
+            this.http.put<any>(`${environment.serverUrl}/tasks/${task.id}`, task, options).toPromise().then(data => {
                 if (data.err) reject(data.err);
                 else {
                     resolve(data.task);
@@ -89,7 +90,7 @@ export class TasksDbService {
             withCredentials: true
         };
         return new Promise<Task>((resolve, reject) => {
-            this.http.delete(`http://localhost:1337/tasks/${task.id}`, options).toPromise()
+            this.http.delete(`${environment.serverUrl}/tasks/${task.id}`, options).toPromise()
                 .then(task => resolve())
                 .catch(err => reject(err));
         });
@@ -109,7 +110,7 @@ export class TasksDbService {
             withCredentials: true
         };
         return new Promise<Attachment>((resolve, reject) => {
-            this.http.post<any>(`http://localhost:1337/tasks/${task.id}/files`, formData, options).toPromise()
+            this.http.post<any>(`${environment.serverUrl}/tasks/${task.id}/files`, formData, options).toPromise()
                 .then(res => {
                     const attachment: Attachment = {
                         id: res.files[0].id,
